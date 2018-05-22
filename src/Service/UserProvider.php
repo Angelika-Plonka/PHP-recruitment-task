@@ -11,19 +11,19 @@ class UserProvider
     /** @var EntityManagerInterface */
     protected $entityManager;
 
-    /** @var UserRepository  */
+    /** @var UserRepository */
     protected $userRepository;
 
     /** @var array */
     public $msg;
 
-    /** @var PeselValidator */
-    protected $peselValidator;
+    /** @var IdentificationNumberValidator */
+    protected $validatedIdentificationNumber;
 
-    public function __construct(EntityManagerInterface $entityManager, PeselValidator $peselValidator, UserRepository $userRepository)
+    public function __construct(EntityManagerInterface $entityManager, IdentificationNumberValidator $validatedIdentificationNumber, UserRepository $userRepository)
     {
         $this->entityManager = $entityManager;
-        $this->peselValidator = $peselValidator;
+        $this->validatedIdentificationNumber = $validatedIdentificationNumber;
         $this->userRepository = $this->entityManager->getRepository(User::class);
     }
 
@@ -39,29 +39,39 @@ class UserProvider
         $country_code = $request->country_code;
         $identification_number = $request->identification_number;
 
-        if($country_code === "PL" || $country_code === "DE"){
-            if($this->peselValidator->validatePesel($identification_number) === true){
+        if ($country_code === "DE") {
+            if ($this->validatedIdentificationNumber->validateIdentifikationsnummerl($identification_number) === true) {
                 $user = new User();
                 $user->setFirstname($firstname);
                 $user->setSurname($surname);
                 $user->setCountryCode($country_code);
                 $user->setIdentificationNumber($identification_number);
-//                $userApplicationId = mt_rand(800000000, 899999999);
                 $user->setUserApplicationId(mt_rand(800000000, 899999999));
 
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
                 return $user;
-            }else{
+            } else {
                 $this->msg = ["identificationNumber", "Invalid value for identificationNumber."];
             }
 
+        } elseif ($country_code === "PL") {
+            if ($this->validatedIdentificationNumber->validatePesel($identification_number) === true) {
+                $user = new User();
+                $user->setFirstname($firstname);
+                $user->setSurname($surname);
+                $user->setCountryCode($country_code);
+                $user->setIdentificationNumber($identification_number);
+                $user->setUserApplicationId(mt_rand(800000000, 899999999));
 
-        }elseif($country_code !== "PL" || $country_code !== "DE"){
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+                return $user;
+            } else {
+                $this->msg = ["identificationNumber", "Invalid value for identificationNumber."];
+            }
+        } else {
             $this->msg = ["country", "Invalid value for country"];
         }
-
-
-
     }
 }
