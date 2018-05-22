@@ -32,9 +32,14 @@ class User
     private $country_code;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=11)
      */
     private $identification_number;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $user_application_id;
 
     public function getId()
     {
@@ -85,6 +90,18 @@ class User
     public function setIdentificationNumber(int $identification_number): self
     {
         $this->identification_number = $identification_number;
+
+        return $this;
+    }
+
+    public function getUserApplicationId(): ?int
+    {
+        return $this->user_application_id;
+    }
+
+    public function setUserApplicationId(int $user_application_id): self
+    {
+        $this->user_application_id = $user_application_id;
 
         return $this;
     }

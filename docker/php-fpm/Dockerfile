@@ -2,6 +2,10 @@ FROM php:7.1.5-fpm
 
 RUN apt-get update && buildDeps="libpq-dev libzip-dev libfreetype6-dev libjpeg62-turbo-dev libpng12-dev" && apt-get install -y $buildDeps git nano wget --no-install-recommends
 RUN docker-php-ext-install pdo pdo_pgsql pgsql zip bcmath
+RUN \
+    docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
+    && docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
+    && docker-php-ext-install pdo_mysql \
 
 RUN wget https://getcomposer.org/composer.phar && mv composer.phar /usr/bin/composer && chmod +x /usr/bin/composer
 

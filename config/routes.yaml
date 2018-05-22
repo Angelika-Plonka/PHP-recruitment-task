@@ -1,5 +1,5 @@
-index:
-    path: /
-    controller: App\Controller\UsersController::listAction
+app:
+    resource: App\Controller\UsersController
+    type: annotation
 
 
