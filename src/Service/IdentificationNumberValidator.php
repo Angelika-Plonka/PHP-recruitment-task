@@ -11,7 +11,7 @@ class IdentificationNumberValidator
      * @param $pesel
      * @return boolean
      */
-    public function validatePesel(string $pesel): bool
+    public function Pesel(string $pesel): bool
     {
 
         $weight = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1];
@@ -29,13 +29,13 @@ class IdentificationNumberValidator
     }
 
     /**
-     * check sum calculation, first number and length of Identifikationsnummer
+     * check sum calculation, first number and length of identifikations nummerl
      * @param $tin
      * @return boolean
      */
-    public function validateIdentifikationsnummerl(string $tin): bool
+    public function identifikationsNummer(string $tin): bool
     {
-        // Identifikationsnummer has to have 11 digits
+        // Identifikations nummer has to have 11 digits
         if (strlen($tin) !== 11) {
             return false;
         } else {
@@ -58,7 +58,7 @@ class IdentificationNumberValidator
                 }
 
                 $product = 10;
-                for ($i = 0; $i <= 9; $i++) {
+                for($i = 0; $i <= 9; $i++) {
                     $sum = ($tinInArray[$i] + $product) % 10;
                     if ($sum == 0) {
                         $sum = 10;
