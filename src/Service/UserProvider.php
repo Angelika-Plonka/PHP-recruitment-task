@@ -35,6 +35,12 @@ class UserProvider
         $user->setCountryCode($country_code);
         $user->setIdentificationNumber($identification_number);
         $userApplicationId = mt_rand(100000000, 899999999);
+        if ($this->userRepository->findOneByUserApplicationId($userApplicationId) == null) {
+            $user->setUserApplicationId($userApplicationId);
+        } else {
+            $userApplicationId = mt_rand(100000000, 899999999);
+            $user->setUserApplicationId($userApplicationId);
+        }
         $user->setUserApplicationId($userApplicationId);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -42,51 +48,39 @@ class UserProvider
     }
 
     /**
-     * add a new user to database
+     * add a new user to database or display an error message in case of failure to add a user
      * @param $request
-     * @return mixed
+     * @return User | array
      */
     public function handleUser($request)
     {
-        $dataFromUser = [
-            'firstname' => $request->firstname,
-            'surname' => $request->surname,
-            'country_code' => $request->country_code,
-            'identification_number' => $request->identification_number
-        ];
-
-//        if(empty($dataFromUser['firstname']) || empty($dataFromUser['surname']) || empty($dataFromUser['country_code']) || empty($dataFromUser['identification_number'])){
-//            foreach ($dataFromUser as $key => $val){
-//                if(empty($val)){
-////                $this->msg[] = [$key, "This value should not be blank."];
-//                $this->msg[$key] = ["This value should not be blank."];
-//                }
-//                return false;
-//            }
-//        }
+        $firstname = $request->firstname;
+        $surname = $request->surname;
+        $country_code = $request->country_code;
+        $identification_number = $request->identification_number;
 
         $errorMsg = [];
 
-        if ($dataFromUser['country_code'] === "DE") {
-            if ($this->validatedIdentificationNumber->identifikationsNummer($dataFromUser['identification_number']) === true) {
+        if ($country_code === "DE") {
+            if ($this->validatedIdentificationNumber->identifikationsNummer($identification_number) === true) {
                 return $this->saveUserIntoDatabase(
-                    $dataFromUser['firstname'],
-                    $dataFromUser['surname'],
-                    $dataFromUser['country_code'],
-                    $dataFromUser['identification_number']
+                    $firstname,
+                    $surname,
+                    $country_code,
+                    $identification_number
                 );
 
             } else {
                 return $errorMsg = ["identificationNumber", "Invalid value for identificationNumber."];
             }
 
-        } elseif ($dataFromUser['country_code'] === "PL") {
-            if ($this->validatedIdentificationNumber->Pesel($dataFromUser['identification_number']) === true) {
+        } elseif ($country_code === "PL") {
+            if ($this->validatedIdentificationNumber->Pesel($identification_number) === true) {
                 return $this->saveUserIntoDatabase(
-                    $dataFromUser['firstname'],
-                    $dataFromUser['surname'],
-                    $dataFromUser['country_code'],
-                    $dataFromUser['identification_number']
+                    $firstname,
+                    $surname,
+                    $country_code,
+                    $identification_number
                 );
 
             } else {

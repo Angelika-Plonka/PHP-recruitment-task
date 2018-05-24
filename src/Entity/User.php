@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity("user_application_id")
  */
 class User
 {
@@ -17,29 +19,31 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(name="firstname", type="string", length=30)
      */
     private $firstname;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(name="surname", type="string", length=30)
      */
     private $surname;
 
     /**
-     * @ORM\Column(type="string", length=2)
+     * @ORM\Column(name="country_code", type="string", length=2)
      */
-    private $country_code;
+    private $countryCode;
 
     /**
-     * @ORM\Column(type="string", length=11)
+     * @ORM\Column(name="identification_number", type="string", length=11)
      */
-    private $identification_number;
+    private $identificationNumber;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var int $userApplicationId
+     * @ORM\Column(name="user_application_id", type="integer", unique=true)
      */
-    private $user_application_id;
+    protected $userApplicationId;
+
 
     public function getId()
     {
@@ -72,36 +76,36 @@ class User
 
     public function getCountryCode(): ?string
     {
-        return $this->country_code;
+        return $this->countryCode;
     }
 
-    public function setCountryCode(string $country_code): self
+    public function setCountryCode(string $countryCode): self
     {
-        $this->country_code = $country_code;
+        $this->countryCode = $countryCode;
 
         return $this;
     }
 
     public function getIdentificationNumber(): ?int
     {
-        return $this->identification_number;
+        return $this->identificationNumber;
     }
 
-    public function setIdentificationNumber(int $identification_number): self
+    public function setIdentificationNumber(int $identificationNumber): self
     {
-        $this->identification_number = $identification_number;
+        $this->identificationNumber = $identificationNumber;
 
         return $this;
     }
 
     public function getUserApplicationId(): ?int
     {
-        return $this->user_application_id;
+        return $this->userApplicationId;
     }
 
-    public function setUserApplicationId(int $user_application_id): self
+    public function setUserApplicationId(int $userApplicationId): self
     {
-        $this->user_application_id = $user_application_id;
+        $this->userApplicationId = $userApplicationId;
 
         return $this;
     }
