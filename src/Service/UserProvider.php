@@ -17,10 +17,18 @@ class UserProvider
     /** @var IdentificationNumberValidator */
     protected $validatedIdentificationNumber;
 
-    public function __construct(EntityManagerInterface $entityManager, IdentificationNumberValidator $validatedIdentificationNumber)
+    public function __construct(EntityManagerInterface $entityManager, IdentificationNumberValidator $validatedIdentificationNumber, UserRepository $userRepository)
     {
         $this->entityManager = $entityManager;
         $this->validatedIdentificationNumber = $validatedIdentificationNumber;
+        $this->userRepository = $this->entityManager->getRepository(User::class);
+    }
+
+    /** Get a list of users in a database */
+    public function findAllUsers()
+    {
+//        return $this->userRepository->getAll();
+        return $this->userRepository->findAll();
     }
 
     /**

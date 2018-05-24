@@ -14,13 +14,16 @@ use App\Service\UserProvider;
 class UsersController extends Controller
 {
     /**
+     * Display all users in a database
      * Matches / exactly
      *
      * @Route("/users", methods="GET")
      */
-    public function listAction()
+    public function listAction(UserProvider $userProvider)
     {
-        return $this->render('users/list.html.twig');
+        return $this->render('users/list.html.twig', array(
+            'users' => $userProvider->findAllUsers()
+        ));
     }
 
 
@@ -70,7 +73,7 @@ class UsersController extends Controller
                     ],
                     201,
                     [
-                        'Location' => '/api/v1/user/' . $typeOfReturn->getUserApplicationId()
+                        'Location' => '/api/v1/users/' . $typeOfReturn->getUserApplicationId()
                     ]
                 );
             } else {

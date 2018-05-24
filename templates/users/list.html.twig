@@ -1,5 +1,26 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <h3>User list:</h3>
-    <p></p>
+    <table class="table">
+        <tr>
+            <th>LP</th>
+            <th>FIRSTNAME</th>
+            <th>SURNAME</th>
+            <th>COUNTRY CODE</th>
+            <th>IDENTYFICATION NUMBER</th>
+            <th>USER APPLICATION ID</th>
+        </tr>
+
+        {% for user in users %}
+            {% set counter = (counter | default(0)) + 1 %}
+            <tr>
+                <td>{{ counter }}</td>
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.surname }}</td>
+                <td>{{ user.countryCode }}</td>
+                <td>{{ user.identificationNumber }}</td>
+                <td>{{ user.userApplicationId }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
